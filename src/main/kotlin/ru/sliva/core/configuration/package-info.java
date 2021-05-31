@@ -1,0 +1,1 @@
+package ru.sliva.core.configuration;
