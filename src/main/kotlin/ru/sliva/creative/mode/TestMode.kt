@@ -16,7 +16,7 @@ class TestMode : Mode("Тестовый режим", "Для тестирова�
         }
     }
 
-    override fun onPlayerInteract(e: PlayerInteractEvent) {
+    override fun onPlayerInteract(e: PlayerInteractEvent, isOwner: Boolean) {
         val p = e.player
         p.sendMessage("Interact")
     }

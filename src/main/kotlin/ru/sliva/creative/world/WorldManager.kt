@@ -98,7 +98,7 @@ class WorldManager(main: CorePlugin) : SimpleConfiguration(File(main.dataFolder,
     fun getMainWorld() : World {
         val world = Bukkit.getWorld("world")
         while (world == null);
-        return world;
+        return world
     }
 
     private fun getWorldUUID(playerUUID : UUID, number : Int) : UUID {
@@ -156,7 +156,7 @@ class WorldManager(main: CorePlugin) : SimpleConfiguration(File(main.dataFolder,
             val world = Bukkit.getWorld(cworld.worldName)
             if(world != null) {
                 if(e.player.world == world) {
-                    mode.onPlayerInteract(e)
+                    mode.onPlayerInteract(e, e.player.uniqueId == cworld.owner.uniqueId)
                 }
             }
         }

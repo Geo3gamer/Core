@@ -15,7 +15,7 @@ open class Mode(val name: String, val description: String, val icon: Material) {
     open fun onPlayerQuit(p: Player, world : World, isOwner: Boolean) {}
     open fun tickSecond(w : World) {}
     open fun onProjectileHit(e : ProjectileHitEvent) {}
-    open fun onPlayerInteract(e : PlayerInteractEvent) {}
+    open fun onPlayerInteract(e : PlayerInteractEvent, isOwner: Boolean) {}
     open fun onEntityDamage(e : EntityDamageEvent) {}
     open fun onPlayerDeath(e : PlayerDeathEvent) {}
 }
