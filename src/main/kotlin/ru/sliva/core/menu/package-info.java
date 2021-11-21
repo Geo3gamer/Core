@@ -1,1 +1,0 @@
-package ru.sliva.core.menu;

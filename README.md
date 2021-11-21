@@ -1,2 +1,2 @@
 # Core
-Simple menu & worlds framework for Paper
+An essential plugin framework for Paper

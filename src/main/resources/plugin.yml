@@ -1,6 +1,6 @@
 name: Core
-main: ru.sliva.core.plugin.CorePlugin
+main: ru.sliva.core.Core
 author: sliva_ru
-api-version: 1.13
+api-version: 1.17
 version: 1.0
 load: STARTUP
