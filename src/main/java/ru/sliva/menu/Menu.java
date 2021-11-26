@@ -15,18 +15,19 @@ import java.util.Objects;
 
 public abstract class Menu implements Listener {
 
-    private final @NotNull Inventory inv;
+    protected final @NotNull Inventory inv;
     private @Nullable Menu previousMenu;
     private final @NotNull Player p;
 
     public Menu(@NotNull Player p, String name, int slots) {
         inv = Bukkit.createInventory(null, slots, name);
         this.p = p;
+        redrawInventory();
         Bukkit.getPluginManager().registerEvents(this, Core.getInstance());
     }
 
-    public final @NotNull Inventory getInventory() {
-        return inv;
+    public final void openInventory() {
+        p.openInventory(inv);
     }
 
     public final @NotNull Player getPlayer() {
@@ -36,6 +37,8 @@ public abstract class Menu implements Listener {
     public final void setPreviousMenu(@NotNull Menu previousMenu) {
         this.previousMenu = previousMenu;
     }
+
+    public abstract void drawInventory(Inventory inv);
 
     public abstract void onClick(@NotNull InventoryClickEvent e);
 
@@ -51,16 +54,24 @@ public abstract class Menu implements Listener {
     }
 
     @EventHandler
-    public final void onCloseEvent(@NotNull InventoryCloseEvent e) {
+    public void onCloseEvent(@NotNull InventoryCloseEvent e) {
         if(Objects.equals(e.getPlayer(), p)) {
             if(Objects.equals(e.getInventory(), inv)) {
                 onClose(e);
                 if(e.getReason() == InventoryCloseEvent.Reason.PLAYER) {
-                    Bukkit.getScheduler().runTaskLater(Core.getInstance(), new PreviousMenuRunnable(), 1);
+                    openPreviousMenu();
                 }
             }
         }
+    }
 
+    public final void openPreviousMenu() {
+        Bukkit.getScheduler().runTaskLater(Core.getInstance(), new PreviousMenuRunnable(), 1);
+    }
+
+    public final void redrawInventory() {
+        inv.clear();
+        drawInventory(inv);
     }
 
     public final class PreviousMenuRunnable implements Runnable {
@@ -68,7 +79,10 @@ public abstract class Menu implements Listener {
         @Override
         public void run() {
             if(previousMenu != null) {
-                p.openInventory(previousMenu.getInventory());
+                if(previousMenu instanceof DynamicMenu) {
+                    ((DynamicMenu) previousMenu).setClosed(false);
+                }
+                previousMenu.openInventory();
             }
         }
     }

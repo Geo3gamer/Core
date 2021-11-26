@@ -8,28 +8,27 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import ru.sliva.menu.Menu;
+import ru.sliva.menu.DynamicMenu;
 
-public class TestMenu extends Menu {
+public class PreviousMenu extends DynamicMenu {
 
-    public TestMenu(@NotNull Player p) {
-        super(p, "test", 54);
+    public PreviousMenu(@NotNull Player p) {
+        super(p, "previous", 54, true);
     }
 
     @Override
     public void drawInventory(Inventory inv) {
-        inv.addItem(new ItemStack(Material.ACACIA_LOG));
+        inv.addItem(new ItemStack(Material.COAL));
     }
 
     @Override
     public void onClick(@NotNull InventoryClickEvent e) {
         e.setCancelled(true);
-        getPlayer().sendMessage(Component.text("testclick"));
+        getPlayer().sendMessage(e.getCurrentItem().getType().toString().toLowerCase());
     }
 
     @Override
     public void onClose(@NotNull InventoryCloseEvent e) {
-        getPlayer().sendMessage(Component.text("testclose"));
-        setPreviousMenu(new PreviousMenu(getPlayer()));
+        getPlayer().sendMessage(Component.text("testpreviousclose"));
     }
 }

@@ -1,9 +1,6 @@
 package ru.sliva.module;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -11,8 +8,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.Collections;
-import java.util.List;
 
 public class Module implements Listener {
 
@@ -28,6 +23,18 @@ public class Module implements Listener {
         this.plugin = plugin;
         this.logger = new ModuleLogger(this);
         this.folder = new File(plugin.getDataFolder(), name);
+    }
+
+    @SuppressWarnings("unchecked") // Module is always properly casted.
+    public static <T> @Nullable T getInstance(final Class<T> moduleClass) {
+        if(!moduleClass.equals(Module.class)) {
+            for(Module module : ModuleManager.getModules()) {
+                if(module.getClass().equals(moduleClass)) {
+                    return (T) module;
+                }
+            }
+        }
+        return null;
     }
 
     public void onFirstEnable() {}
