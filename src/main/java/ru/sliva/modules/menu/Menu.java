@@ -1,5 +1,6 @@
-package ru.sliva.menu;
+package ru.sliva.modules.menu;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,20 +11,22 @@ import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.sliva.core.Core;
+import ru.sliva.module.Module;
+import ru.sliva.modules.scheduler.ModuleScheduler;
 
 import java.util.Objects;
 
 public abstract class Menu implements Listener {
 
-    protected final @NotNull Inventory inv;
+    private final @NotNull Inventory inv;
     private @Nullable Menu previousMenu;
     private final @NotNull Player p;
 
     public Menu(@NotNull Player p, String name, int slots) {
-        inv = Bukkit.createInventory(null, slots, name);
+        inv = Bukkit.createInventory(null, slots, Component.text(name));
         this.p = p;
         redrawInventory();
-        Bukkit.getPluginManager().registerEvents(this, Core.getInstance());
+        Objects.requireNonNull(Module.getInstance(ModuleMenu.class)).registerListener(this);
     }
 
     public final void openInventory() {
@@ -66,7 +69,7 @@ public abstract class Menu implements Listener {
     }
 
     public final void openPreviousMenu() {
-        Bukkit.getScheduler().runTaskLater(Core.getInstance(), new PreviousMenuRunnable(), 1);
+        ModuleScheduler.later(new PreviousMenuRunnable(), 1);
     }
 
     public final void redrawInventory() {

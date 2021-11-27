@@ -3,4 +3,3 @@ main: ru.sliva.core.Core
 author: sliva_ru
 api-version: 1.17
 version: 1.0
-load: STARTUP

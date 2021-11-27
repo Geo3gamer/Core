@@ -1,26 +1,25 @@
-package ru.sliva.menu;
+package ru.sliva.modules.menu;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.jetbrains.annotations.NotNull;
-import ru.sliva.core.Core;
+import ru.sliva.modules.scheduler.ModuleScheduler;
 
 public abstract class DynamicMenu extends Menu{
 
-    private boolean isClosed = false;
+    private boolean isClosed;
     private int dynamicID;
     private final int watchdog;
 
     public DynamicMenu(@NotNull Player p, String name, int slots, boolean isClosed) {
         super(p, name, slots);
         this.isClosed = isClosed;
-        watchdog = Bukkit.getScheduler().runTaskTimerAsynchronously(Core.getInstance(), new WatchdogRunnable(), 20, 0).getTaskId();
+        watchdog = ModuleScheduler.timerAsync(new WatchdogRunnable(), 20).getTaskId();
     }
 
     public final void unload() {
-        Bukkit.getScheduler().cancelTask(watchdog);
-        Bukkit.getScheduler().cancelTask(dynamicID);
+        ModuleScheduler.stopTimer(watchdog);
+        ModuleScheduler.stopTimer(dynamicID);
     }
 
     public final void setClosed(boolean closed) {
@@ -38,7 +37,7 @@ public abstract class DynamicMenu extends Menu{
     }
 
     private void runDynamicTask() {
-        dynamicID = Bukkit.getScheduler().runTaskTimer(Core.getInstance(), new DynamicMenuRunnable(), 20, 0).getTaskId();
+        dynamicID = ModuleScheduler.timer(new DynamicMenuRunnable(), 20).getTaskId();
     }
 
     public final class DynamicMenuRunnable implements Runnable {
@@ -54,11 +53,11 @@ public abstract class DynamicMenu extends Menu{
         @Override
         public void run() {
             if(isClosed) {
-                if(Bukkit.getScheduler().isCurrentlyRunning(dynamicID)) {
-                    Bukkit.getScheduler().cancelTask(dynamicID);
+                if(ModuleScheduler.isRunning(dynamicID)) {
+                    ModuleScheduler.stopTimer(dynamicID);
                 }
             } else {
-                if(!Bukkit.getScheduler().isCurrentlyRunning(dynamicID)) {
+                if(!ModuleScheduler.isRunning(dynamicID)) {
                     runDynamicTask();
                 }
             }

@@ -16,13 +16,19 @@ public class Module implements Listener {
     private final ModuleLogger logger;
     private final Plugin plugin;
     private final File folder;
+    private final ModulePriority priority;
     private ModuleConfig config;
 
-    public Module(String name, @NotNull Plugin plugin) {
+    public Module(@NotNull Plugin plugin, String name, ModulePriority priority) {
         this.name = name;
         this.plugin = plugin;
+        this.priority = priority;
         this.logger = new ModuleLogger(this);
         this.folder = new File(plugin.getDataFolder(), name);
+    }
+
+    public Module(@NotNull Plugin plugin, String name) {
+        this(plugin, name, ModulePriority.NORMAL);
     }
 
     @SuppressWarnings("unchecked") // Module is always properly casted.
@@ -92,6 +98,10 @@ public class Module implements Listener {
 
     public final @NotNull ModuleConfig getConfig() {
         return config;
+    }
+
+    public final @NotNull ModulePriority getPriority() {
+        return priority;
     }
 
     @Nullable

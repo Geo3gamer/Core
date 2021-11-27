@@ -1,4 +1,4 @@
-package ru.sliva.testmodule;
+package ru.sliva.modules.testmodule;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
@@ -8,7 +8,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import ru.sliva.menu.Menu;
+import ru.sliva.modules.menu.Menu;
 
 public class TestMenu extends Menu {
 

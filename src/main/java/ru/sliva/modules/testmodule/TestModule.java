@@ -1,4 +1,4 @@
-package ru.sliva.testmodule;
+package ru.sliva.modules.testmodule;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
@@ -10,13 +10,13 @@ import ru.sliva.module.Module;
 
 public class TestModule extends Module {
 
-    public TestModule(Plugin plugin) {
-        super("test", plugin);
+    public TestModule(@NotNull Plugin plugin) {
+        super(plugin, "Test");
     }
 
     @Override
     public void onEnable() {
-
+        registerCommand(new TestCommand(this));
     }
 
     @EventHandler

@@ -17,16 +17,16 @@ public abstract class ModuleCommand extends Command {
     }
 
     public ModuleCommand(@NotNull Module module, @NotNull String name, @NotNull String description, @NotNull String usageMessage, @NotNull String permission, @NotNull List<String> aliases) {
-        this(module, name, usageMessage, description, aliases);
+        this(module, name, description, usageMessage, aliases);
         setPermission(permission);
     }
 
     public ModuleCommand(@NotNull Module module, @NotNull String name, @NotNull String description, @NotNull String usageMessage) {
-        this(module, name, usageMessage, description, Collections.emptyList());
+        this(module, name, description, usageMessage, Collections.emptyList());
     }
 
     public ModuleCommand(@NotNull Module module, @NotNull String name, @NotNull String description, @NotNull String usageMessage, @NotNull String permission) {
-        this(module, name, usageMessage, description, permission, Collections.emptyList());
+        this(module, name, description, usageMessage, permission, Collections.emptyList());
     }
 
     public abstract boolean exec(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args);

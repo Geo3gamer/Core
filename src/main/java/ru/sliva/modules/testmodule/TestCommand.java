@@ -1,4 +1,4 @@
-package ru.sliva.testmodule;
+package ru.sliva.modules.testmodule;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
