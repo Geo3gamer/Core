@@ -1,13 +1,18 @@
 package ru.sliva.module;
 
-import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.SimplePluginManager;
+import org.bukkit.plugin.java.JavaPluginLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.sliva.api.Commands;
+import ru.sliva.api.Events;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Module implements Listener {
 
@@ -18,6 +23,8 @@ public class Module implements Listener {
     private final File folder;
     private final ModulePriority priority;
     private ModuleConfig config;
+    private final List<Listener> listeners = new ArrayList<>();
+    private final List<ModuleCommand> commands = new ArrayList<>();
 
     public Module(@NotNull Plugin plugin, String name, ModulePriority priority) {
         this.name = name;
@@ -49,10 +56,6 @@ public class Module implements Listener {
 
     public void onDisable() {}
 
-    public void onReload() {
-        reload();
-    }
-
     public final void enable() {
         final long time = System.currentTimeMillis();
         if(folder.mkdirs()) {
@@ -67,13 +70,15 @@ public class Module implements Listener {
 
     public final void disable() {
         onDisable();
+        Events.unregisterListeners(this);
+        Commands.unregisterCommands(this);
         enabled = false;
         logger.info("Module disabled.");
     }
 
     public final void reload() {
-        onDisable();
-        onEnable();
+        disable();
+        enable();
     }
 
     public final boolean isEnabled() {
@@ -104,20 +109,28 @@ public class Module implements Listener {
         return priority;
     }
 
+    public final @NotNull List<Listener> getListeners() {
+        return listeners;
+    }
+
+    public final @NotNull List<ModuleCommand> getCommands() {
+        return commands;
+    }
+
     @Nullable
     public final InputStream getResource(@NotNull String fileName) {
-        return plugin.getResource(name + File.separator + fileName);
+        return plugin.getResource(name + "/" + fileName);
     }
 
     public final void saveResource(@NotNull String resourcePath, boolean replace) {
-        plugin.saveResource(name + File.separator + resourcePath, replace);
+        plugin.saveResource(name + "/" + resourcePath, replace);
     }
 
-    public final void registerListener(Listener listener) {
-        Bukkit.getPluginManager().registerEvents(listener, plugin);
+    public final void registerListener(Listener... registerListeners) {
+        listeners.addAll(Events.registerListener(plugin, registerListeners));
     }
 
-    public final void registerCommand(ModuleCommand command) {
-        Bukkit.getCommandMap().register(name, command);
+    public final void registerCommand(ModuleCommand... registerCommands) {
+        commands.addAll(Commands.registerCommand(registerCommands));
     }
 }

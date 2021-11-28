@@ -1,9 +1,9 @@
-package ru.sliva.modules.menu;
+package ru.sliva.api.menu;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.jetbrains.annotations.NotNull;
-import ru.sliva.modules.scheduler.ModuleScheduler;
+import ru.sliva.api.Schedule;
 
 public abstract class DynamicMenu extends Menu{
 
@@ -14,12 +14,12 @@ public abstract class DynamicMenu extends Menu{
     public DynamicMenu(@NotNull Player p, String name, int slots, boolean isClosed) {
         super(p, name, slots);
         this.isClosed = isClosed;
-        watchdog = ModuleScheduler.timerAsync(new WatchdogRunnable(), 20).getTaskId();
+        watchdog = Schedule.timerAsync(new WatchdogRunnable(), 20).getTaskId();
     }
 
     public final void unload() {
-        ModuleScheduler.stopTimer(watchdog);
-        ModuleScheduler.stopTimer(dynamicID);
+        Schedule.stopTimer(watchdog);
+        Schedule.stopTimer(dynamicID);
     }
 
     public final void setClosed(boolean closed) {
@@ -37,7 +37,7 @@ public abstract class DynamicMenu extends Menu{
     }
 
     private void runDynamicTask() {
-        dynamicID = ModuleScheduler.timer(new DynamicMenuRunnable(), 20).getTaskId();
+        dynamicID = Schedule.timer(new DynamicMenuRunnable(), 20).getTaskId();
     }
 
     public final class DynamicMenuRunnable implements Runnable {
@@ -53,11 +53,11 @@ public abstract class DynamicMenu extends Menu{
         @Override
         public void run() {
             if(isClosed) {
-                if(ModuleScheduler.isRunning(dynamicID)) {
-                    ModuleScheduler.stopTimer(dynamicID);
+                if(Schedule.isRunning(dynamicID)) {
+                    Schedule.stopTimer(dynamicID);
                 }
             } else {
-                if(!ModuleScheduler.isRunning(dynamicID)) {
+                if(!Schedule.isRunning(dynamicID)) {
                     runDynamicTask();
                 }
             }

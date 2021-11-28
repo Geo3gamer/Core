@@ -1,22 +1,16 @@
-package ru.sliva.modules.scheduler;
+package ru.sliva.api;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
-import ru.sliva.module.Module;
-import ru.sliva.module.ModulePriority;
+import ru.sliva.core.Core;
 
-public class ModuleScheduler extends Module {
+public final class Schedule {
 
-    private static Plugin plugin;
+    private static final Plugin plugin = Core.getInstance();
     private static final BukkitScheduler scheduler = Bukkit.getScheduler();
-
-    public ModuleScheduler(@NotNull Plugin plugin) {
-        super(plugin, "Scheduler", ModulePriority.CRITICAL);
-        ModuleScheduler.plugin = plugin;
-    }
 
     @NotNull
     public static BukkitTask later(@NotNull Runnable task, long delay) {

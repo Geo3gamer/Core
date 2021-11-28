@@ -23,6 +23,5 @@ public class TestModule extends Module {
     public void onJoin(@NotNull PlayerJoinEvent e) {
         Player p = e.getPlayer();
         p.sendMessage(Component.text("listener works."));
-        new TestMenu(p).openInventory();
     }
 }

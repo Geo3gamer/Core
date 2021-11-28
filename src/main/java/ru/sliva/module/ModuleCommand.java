@@ -29,6 +29,10 @@ public abstract class ModuleCommand extends Command {
         this(module, name, description, usageMessage, permission, Collections.emptyList());
     }
 
+    public final @NotNull Module getModule() {
+        return module;
+    }
+
     public abstract boolean exec(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args);
 
     public @Nullable List<String> complete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) {

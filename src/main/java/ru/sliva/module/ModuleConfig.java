@@ -1,6 +1,7 @@
 package ru.sliva.module;
 
 import com.google.common.base.Charsets;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -25,6 +26,7 @@ public class ModuleConfig extends YamlConfiguration {
         reloadConfig();
     }
 
+    @SuppressWarnings("all")
     public void reloadConfig() {
         try {
             if(!file.exists()) {
@@ -68,7 +70,7 @@ public class ModuleConfig extends YamlConfiguration {
     public @NotNull List<String> getColorizedList(@NotNull String path) {
         List<String> list = getStringList(path);
         for(int i = 0; i < list.size(); i++) {
-            list.set(0, ChatColor.translateAlternateColorCodes('&', list.get(0)));
+            list.set(i, ChatColor.translateAlternateColorCodes('&', list.get(i)));
         }
         return list;
     }

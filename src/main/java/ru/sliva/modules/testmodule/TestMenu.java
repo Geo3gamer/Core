@@ -8,7 +8,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import ru.sliva.modules.menu.Menu;
+import ru.sliva.api.menu.Menu;
 
 public class TestMenu extends Menu {
 
