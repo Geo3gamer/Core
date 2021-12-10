@@ -6,16 +6,19 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
+import ru.sliva.core.Core;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public final class ModuleManager {
 
     private static final List<Module> modules = new ArrayList<>();
+    private static final Logger logger = Core.getInstance().getLogger();
     private static boolean loaded = false;
 
     public static void registerModule(@NotNull Module module) {
@@ -63,9 +66,9 @@ public final class ModuleManager {
                 }
             }
             loaded = true;
-            Bukkit.getLogger().info("All modules were enabled.");
+            logger.info("All modules were enabled.");
         } catch (Throwable e) {
-            Bukkit.getLogger().log(Level.SEVERE, "Error while enabling modules: ", e);
+            logger.log(Level.SEVERE, "Error while enabling modules: ", e);
             disableModules();
             Bukkit.shutdown();
         }
@@ -85,7 +88,7 @@ public final class ModuleManager {
             }
             loaded = false;
         } catch (Throwable e) {
-            Bukkit.getLogger().log(Level.SEVERE, "Error while disabling modules: ", e);
+            logger.log(Level.SEVERE, "Error while disabling modules: ", e);
         }
     }
 
@@ -95,7 +98,7 @@ public final class ModuleManager {
                 reloadModule(module);
             }
         } catch (Throwable e) {
-            Bukkit.getLogger().log(Level.SEVERE, "Error while reloading modules: ", e);
+            logger.log(Level.SEVERE, "Error while reloading modules: ", e);
         }
     }
 

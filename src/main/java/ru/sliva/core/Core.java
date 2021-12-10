@@ -2,6 +2,7 @@ package ru.sliva.core;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import ru.sliva.api.Commands;
 import ru.sliva.module.ModuleListener;
 import ru.sliva.module.ModuleManager;
 import ru.sliva.modules.modulemanager.ModuleModuleManager;

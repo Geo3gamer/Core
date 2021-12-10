@@ -4,17 +4,21 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
+import org.jetbrains.annotations.NotNull;
+import ru.sliva.core.Core;
 import ru.sliva.module.Module;
 import ru.sliva.module.ModuleCommand;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
-public final class Commands {
+public final class Commands implements Listener {
 
     private static final SimpleCommandMap bukkitCommandMap = (SimpleCommandMap) Bukkit.getCommandMap();
+
+    public Commands(@NotNull Core instance) {
+        Bukkit.getPluginManager().registerEvents(this, instance);
+    }
 
     public static void unregisterCommand(ModuleCommand cmd) {
         Map<String, Command> knownCommands = bukkitCommandMap.getKnownCommands();
@@ -30,6 +34,12 @@ public final class Commands {
         updateCommands();
     }
 
+    public static void unregisterAll() {
+        Map<String, Command> knownCommands = bukkitCommandMap.getKnownCommands();
+        knownCommands.clear();
+        updateCommands();
+    }
+
     public static List<ModuleCommand> registerCommand(ModuleCommand... cmds) {
         List<ModuleCommand> commandList = Arrays.asList(cmds);
         commandList.forEach(command -> bukkitCommandMap.register(command.getModule().getName(), command));
@@ -41,7 +51,24 @@ public final class Commands {
         module.getCommands().clear();
     }
 
-    public static void updateCommands() {
+    public static List<String> getValidCommands() {
+        List<String> list = new ArrayList<>();
+        for(Command cmd : bukkitCommandMap.getCommands()) {
+            list.add(cmd.getName());
+        }
+        return list;
+    }
+
+    public static boolean isValidCommand(String name) {
+        for(String s : getValidCommands()) {
+            if(s.equalsIgnoreCase(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static void updateCommands() {
         Bukkit.getOnlinePlayers().forEach(Player::updateCommands);
     }
 }
